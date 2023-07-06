@@ -33,17 +33,18 @@ const Write = () => {
         }
     }
 
-    
-
-
     const submit = (e) => {
         e.preventDefault();
         alert(`goDay : ${goDay}, comeDay : ${comeDay}, friends : ${friends}, placeSearch : ${placeSearch}, placePrice : ${placePrice}, taxPrice : ${taxPrice}`);
     }
 
-     
     return (
         <>
+            <LoadScript
+                googleMapsApiKey="AIzaSyAQRIT2tpNRKu9hleY2y7XHil4qxRyFGv8"
+                libraries={['places']}
+            >
+            </LoadScript>
             <div className="content-wrap">
                 <form method="post" onSubmit={submit}>
                 <ul className="date-selector">
@@ -91,7 +92,7 @@ const Write = () => {
                     </div>
                     <div className="input-st-wrap">
                         <Input txt="구매 물품 가격" id="taxPrice" onChange={onChangeHandler} inputType="tel"/>
-                </div>
+                    </div>
                 </section>
                 <button className="btn btn-st1" type="submit"><p>등록</p></button>
             </form>
