@@ -85,6 +85,10 @@ export const Delete = async (fbCollection, sq) => {
   }
 }
 
+/*
+  User 컬렉션과 FreindRequest 컬렉션을 조인 시킴.
+  snapshot으로 이벤트가 있을때 바로 UI가 바뀜.
+*/
 export const FriendSelect = (session, callback) => {
   return new Promise((resolve, reject) => {
     try {

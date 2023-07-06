@@ -54,8 +54,8 @@ const Friend = () => {
     }
   }
 
+  //snapShot에서 Event가 있을 경우 콜백되는 함수
   const handleFriendData = (data) => {
-    // 데이터 처리 로직
    setAllUser(data);
   };
 
