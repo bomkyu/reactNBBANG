@@ -44,6 +44,9 @@ header > p > img { width: 34px; }
 .friend-list dd > .request-wrap p.request-friend.request { color:#0095F6 }
 .friend-list dd > .request-wrap p.request-friend.accept { background-color: #000; color:#FFF; }
 
+.friend-list::after { position: absolute; width: 20px; height: 20px; right: 0; top: 50%; transform: scale(0) translateY(-50%); transition: 0.2s; background: url('/public/images/ic_check.png') center center/cover no-repeat; content: ''; }
+.friend-list.active::after { transform: scale(1) translateY(-50%); }
+
 /* 콘텐츠 영역 */
 .content-wrap { max-width: 1320px; width: 100%; margin: 0 auto; padding: 80px 20px 80px;}
 
@@ -114,8 +117,11 @@ header > p > img { width: 34px; }
 .spiner { position: fixed; display: none; width: 100%; height: 100vh; top: 0; left: 0; background: #FFF url('/public/images/ic_loading.svg') center center/60px no-repeat; z-index: 999; }
 
 /* 유저 가로 리스트 */
-.user_list { display: flex; gap: 10px; }
-.user_list > li { position: relative; width: 100px;  }
+.user_list { display: flex; flex-wrap: nowrap; overflow-x: auto; gap: 10px; }
+/*스크롤바 숨김*/
+.user_list { -ms-overflow-style: none; /* IE and Edge */ scrollbar-width: none; /* Firefox */ }
+.user_list::-webkit-scrollbar { display: none; /* Chrome, Safari, Opera*/ }
+.user_list > li { position: relative; width: 100px; flex: 0 0 auto; cursor: pointer;  }
 .user_list > li.king::after { position:absolute; top: -20px; left: 50%; transform: translateX(-50%); width: 20px; height: 20px; background: url('/public/images/ic_crwon.png') center center/cover no-repeat; z-index: -1; content: ""; }
 .user_list > li > p { text-align: center; }
 
