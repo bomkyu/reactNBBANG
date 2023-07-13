@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { getFirestore, collection, doc, setDoc, onSnapshot, getDocs, query, where, updateDoc, deleteDoc } from "firebase/firestore";
+import { getFirestore, collection, doc, setDoc, onSnapshot, getDocs, query, where, updateDoc, deleteDoc, Timestamp } from "firebase/firestore";
 import { getStorage, ref, uploadBytes, getDownloadURL} from "firebase/storage";
 
 const firebaseConfig = {
@@ -13,9 +13,22 @@ const firebaseConfig = {
   databaseURL: process.env.REACT_APP_DATABASE_URL,
 };
 
-const formatter = new Intl.DateTimeFormat('ko-KR', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false, timeZone: 'Asia/Seoul' });
-const parts = formatter.formatToParts(new Date());
-const currentDate = `${parts[0].value}-${parts[2].value}-${parts[4].value} ${parts[6].value}:${parts[8].value}:${parts[10].value}`;
+// Firestore Timestamp 가져오기
+const timestamp = Timestamp.now();
+
+// 타임스탬프를 원하는 형식으로 변환하는 함수
+function formatTimestamp(timestamp) {
+  const date = timestamp.toDate();
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  const hours = String(date.getHours()).padStart(2, '0');
+  const minutes = String(date.getMinutes()).padStart(2, '0');
+  const seconds = String(date.getSeconds()).padStart(2, '0');
+
+  return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+}
+
 
 // Firebase 앱을 초기화합니다.
 const app = initializeApp(firebaseConfig);
@@ -26,7 +39,7 @@ export const db = getFirestore(app);
 export const imageUpload = async (image) => {
   const storage = getStorage();
   // Storage에 업로드할 위치 지정
-  const storageRef = ref(storage, "images/" + currentDate);
+  const storageRef = ref(storage, "images/" + formatTimestamp(timestamp));
 
   try {
     //이미지를 업로드
@@ -49,7 +62,7 @@ export const Insert = async (fbCollection, obj) => {
     const updatedData = {
       ...obj,
       sq: docRef.id,
-      dateTime : currentDate
+      dateTime : formatTimestamp(timestamp)
     };
       
     await setDoc(docRef, updatedData);
@@ -60,7 +73,12 @@ export const Insert = async (fbCollection, obj) => {
 
 export const Select = async (fbCollection, w) => {
   try {
-    const q = query(collection(db, fbCollection));
+    let q;
+    if(w){
+      q = query(collection(db, fbCollection), where(w.field, w.operator, w.value));
+    }else{
+      q = query(collection(db, fbCollection));
+    }
     const querySnapshot = await getDocs(q);
     const data = [];
     querySnapshot.forEach((doc) => {
