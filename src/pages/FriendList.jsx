@@ -26,7 +26,7 @@ const FriendList = ({data, onClickRequestFunc}) => {
                         <p className="user-name">{param.userNickName}</p>
                         
                         <div className='request-wrap'>
-                          <p className='request-friend accept' onClick={() => onClickRequestFunc('accept', param.request.sq)}>수락{param.request.sq}</p>
+                          <p className='request-friend accept' onClick={() => onClickRequestFunc('accept', param.request.sq)}>수락</p>
                           <p className='request-friend accept' onClick={() => onClickRequestFunc('refusal', param.request.sq)}>거절</p>
                         </div>
                       </dd>
