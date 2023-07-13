@@ -13,16 +13,20 @@ const firebaseConfig = {
   databaseURL: process.env.REACT_APP_DATABASE_URL,
 };
 
+const formatter = new Intl.DateTimeFormat('ko-KR', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false, timeZone: 'Asia/Seoul' });
+const parts = formatter.formatToParts(new Date());
+const currentDate = `${parts[0].value}-${parts[2].value}-${parts[4].value} ${parts[6].value}:${parts[8].value}:${parts[10].value}`;
+
 // Firebase 앱을 초기화합니다.
 const app = initializeApp(firebaseConfig);
 
 // 필요한 Firebase 서비스를 가져옵니다.
 export const db = getFirestore(app);
 
-export const imageUpload = async (image, imageName) => {
+export const imageUpload = async (image) => {
   const storage = getStorage();
   // Storage에 업로드할 위치 지정
-  const storageRef = ref(storage, "images/" + imageName);
+  const storageRef = ref(storage, "images/" + currentDate);
 
   try {
     //이미지를 업로드
@@ -44,7 +48,8 @@ export const Insert = async (fbCollection, obj) => {
       
     const updatedData = {
       ...obj,
-      sq: docRef.id
+      sq: docRef.id,
+      dateTime : currentDate
     };
       
     await setDoc(docRef, updatedData);
@@ -114,7 +119,7 @@ export const FriendSelect = (session, callback) => {
             
             return { ...param, request: sortation };
           });
-          console.log('firebase ////', userListArr);
+          //console.log('firebase ////', userListArr);
           resolve(userListArr);
           if (typeof callback === 'function') {
             callback(userListArr); // callback 호출

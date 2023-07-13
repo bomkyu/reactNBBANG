@@ -6,7 +6,7 @@ import imageCompression from "browser-image-compression";
 
 const Register = () => {
   const [previewImage, setPreviewImage] = useState(null); //preivew
-  const [saveImage, setSaveImage] = useState(null); //preivew
+  const [saveImage, setSaveImage] = useState(null); //save
   const fileInput = useRef(null); //해당 돔을 선택하는것. javascript로는 querrySelector
   const [user, setUser] = useState(null); //필드 검사할 State
   const navigate = useNavigate();
@@ -113,20 +113,15 @@ const Register = () => {
       alert('입력폼을 확인해 주세요.');
       return
     }
-
-    const formatter = new Intl.DateTimeFormat('ko-KR', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false, timeZone: 'Asia/Seoul' });
-    const parts = formatter.formatToParts(new Date());
-    const currentDate = `${parts[0].value}-${parts[2].value}-${parts[4].value} ${parts[6].value}:${parts[8].value}:${parts[10].value}`;
     const userJson = {
         "id": formFields[0].value.trim(),
         "passWord": formFields[1].value.trim(),
         "userName": formFields[3].value.trim(),
         "userNickName": formFields[4].value.trim(),
-        "imgUrl" : '',
-        "datetime": currentDate.trim()
+        "imgUrl" : null,
     }
-    if(previewImage !== null){ //이미지가 Null이 아닐때
-      imageUpload(saveImage, currentDate)
+    if(saveImage !== null){ //이미지가 Null이 아닐때
+      imageUpload(saveImage)
       .then(url => {
         userJson.imgUrl = url
         
