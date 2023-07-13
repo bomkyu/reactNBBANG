@@ -6,7 +6,7 @@ const firebaseConfig = {
   apiKey: process.env.REACT_APP_API_KEY,
   authDomain: process.env.REACT_APP_AUTH_DOMAIN,
   projectId: "n--bbang",
-  storageBucket: process.env.REACT_APP_STORAGE_BUCKET,
+  storageBucket: "n--bbang.appspot.com",
   messagingSenderId: process.env.REACT_APP_MESSAGIN_ID,
   appId: process.env.REACT_APP_ID,
   measurementId: process.env.REACT_APP_MEASUREMENT_ID,

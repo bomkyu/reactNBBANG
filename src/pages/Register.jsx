@@ -113,7 +113,7 @@ const Register = () => {
       alert('입력폼을 확인해 주세요.');
       return
     }
-    const userJson = {
+    const userObj = {
         "id": formFields[0].value.trim(),
         "passWord": formFields[1].value.trim(),
         "userName": formFields[3].value.trim(),
@@ -123,18 +123,25 @@ const Register = () => {
     if(saveImage !== null){ //이미지가 Null이 아닐때
       imageUpload(saveImage)
       .then(url => {
-        userJson.imgUrl = url
-        
-        Insert('User', userJson);
+          userObj.imgUrl = url
+          return Insert('User', userObj);
+      })
+      .then(()=>{
+          sessionStorage.setItem('userID', formFields[0].value.trim());
+          navigate('/main', { replace: true });
       })
       .catch((error) => {
-        return alert(`에러발생!${error}`)
+        return alert(`에러발생! ${error}`)
       });
     }else{ //이미지가 Null일때
-      Insert('User', userJson);
+      Insert('User', userObj)
+      .then(()=> {
+          sessionStorage.setItem('userID', formFields[0].value.trim());
+          navigate('/main', { replace: true });
+      })
+      .catch((error)=>{return alert(`에러발생! ${error}`)});
     }
-    sessionStorage.setItem('userID', formFields[0].value.trim());
-    navigate('/main', { replace: true });
+    
   }
   return (
     <div className="login-wrap">

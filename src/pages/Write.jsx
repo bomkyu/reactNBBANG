@@ -132,9 +132,7 @@ const Write = () => {
             .then(()=>{
                 navigate('/main', { replace: true });
             })
-            .catch((error) => {
-              return console.error(error);
-            });
+            .catch((error)=>{return alert(`에러발생! ${error}`)});
           }else{ //이미지가 Null일때
             Insert('Trip', obj)
             .then(()=> {
