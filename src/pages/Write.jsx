@@ -1,7 +1,8 @@
 import React, { useEffect, useState, useRef } from 'react'
-import { FriendSelect, Insert, imageUpload } from '../Api/firebase';
+import { FriendSelect, Insert, imageUpload, Select } from '../Api/firebase';
 import SearchLocationInput from '../Api/googlePlace';
 import imageCompression from "browser-image-compression";
+import {stringNumberToInt} from "../userFunc"
 
 import {useNavigate} from "react-router-dom";
 import Input from '../UI/Input'
@@ -10,6 +11,7 @@ import Nodata from '../UI/Nodata';
 
 const Write = () => {
     const sessionId = sessionStorage.getItem('userID');
+    const [myInfo, setMyInfo] = useState({})
     const [friend, setFriend] = useState([]);
     const [modal, setModal] = useState({isOpen : false, type : ''});
     const [inputs, setInputs] = useState({ goDay : "2023-07-05", comeDay: "2023-08-05", friends: null, placeSearch: null, placePrice: null, taxPrice: null});
@@ -18,9 +20,15 @@ const Write = () => {
     const fileInput = useRef(null); //해당 돔을 선택하는것. javascript로는 querrySelector
     const {goDay, comeDay, friends, placeSearch, placePrice, taxPrice} = inputs;
     const navigate = useNavigate();
+
+    //친구목록 가져오기
+
     const fetchData = async () => {
       let usersData = await FriendSelect(`${sessionId}`,handleFriendData);
       filterFriend(usersData);
+
+      const my = await Select('User', {field : 'id', operator : '==', value : sessionId })
+      setMyInfo(my[0]);
     };
 
     //snapShot에서 Event가 있을 경우 콜백되는 함수
@@ -28,6 +36,7 @@ const Write = () => {
         filterFriend(data);
     };
 
+    //친구목록 가져오는 함수
     const filterFriend = (data) => {
         const filterFriends = data
         .filter((param) => param.request?.status === 'accept' && param.request?.status !== null)
@@ -36,6 +45,7 @@ const Write = () => {
     }
 
     useEffect(()=> {
+        
         fetchData();
     }, [])
     
@@ -53,9 +63,18 @@ const Write = () => {
 
     const onChangeHandler = (e) => {
         const {id, value} = e.target
+
+        let formattedValue = value; //천단위마다 콤마
+        if (id === "placePrice" || id === "taxPrice") {
+            const numberValue = Number(value.replace(/[^0-9.-]+/g, ""));
+            if (!isNaN(numberValue)) {
+              formattedValue = numberValue.toLocaleString();
+            }
+        }
+
         setInputs({
             ...inputs,
-            [id] : value
+            [id] : formattedValue
         })
     }
 
@@ -120,9 +139,16 @@ const Write = () => {
 
     const submit = async (e) => {
         e.preventDefault();
-        alert(`goDay : ${goDay}, comeDay : ${comeDay}, friends : ${friends}, placeSearch : ${placeSearch}, placePrice : ${placePrice}, taxPrice : ${taxPrice}`);
-        const obj = {...inputs, manager : sessionId, TaxImg : null}
-        //await Insert('Trip', obj);
+        const obj = {...inputs,
+            placePrice : stringNumberToInt(placePrice),
+            taxPrice : stringNumberToInt(taxPrice),
+            manager : {
+                id : myInfo.id,
+                imgUrl : myInfo.imgUrl,
+                userName : myInfo.userName,
+            },
+            TaxImg : null
+        }
         if(saveImage !== null){ //이미지가 Null이 아닐때
             imageUpload(saveImage)
             .then(url => {
@@ -167,7 +193,7 @@ const Write = () => {
                     <a className="btn btn-st1" onClick={()=>openModal('h_80')}><span className="plus"></span></a>
                     {
                         filteredFriends.length > 0 ?
-                        <ul className="user_list" style={{marginTop:'20px'}}>
+                        <ul className="user_list">
                         {
                             filteredFriends.map((param) => (
                                 <li onClick={()=>onClickHandler(param.id)} key={param.id}>
@@ -196,7 +222,7 @@ const Write = () => {
                         <Nodata txt='숙소를 선택해 주세요!'/>
                     }
                     <div className="input-st-wrap">
-                        <Input txt="숙소가격" id="placePrice" name="placePrice" onChange={onChangeHandler} inputType="number"/>
+                        <Input txt="숙소가격" id="placePrice" name="placePrice" onChange={onChangeHandler} inputType="text" value={placePrice}/>
                     </div>
                 </section>
                 <section className="sec3">
@@ -210,7 +236,7 @@ const Write = () => {
                         }
                     </div>
                     <div className="input-st-wrap">
-                        <Input txt="구매 물품 가격" id="taxPrice" onChange={onChangeHandler} inputType="number"/>
+                        <Input txt="구매 물품 가격" id="taxPrice" onChange={onChangeHandler} inputType="text" value={taxPrice}/>
                     </div>
                 </section>
                 <button className="btn btn-st1" type="submit"><p>등록</p></button>

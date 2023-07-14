@@ -3,6 +3,10 @@ import {Select} from '../Api/firebase'
 
 import NoData from '../UI/Nodata'
 import Nodata from '../UI/Nodata';
+import TextBox from '../UI/TextBox';
+import ContentRow from '../UI/ContentRow';
+import Spinner from '../UI/Spinner';
+import GoogleMap from '../Api/GoogleMap';
 /*
   firebase Cloud
   1. collection 구분 (firebase/firestore)
@@ -10,16 +14,18 @@ import Nodata from '../UI/Nodata';
 const Main = () => {
   const [userInfo, setUserInfo] = useState(null);
   const [tripInfo, setTripInfo] = useState(null);
+  const [showSpinner, setShowSpinner] = useState(true);
   const { 
           sq,
           goDay, 
           comeDay,
-          friends,
-          manager,
-          placeSearch : {address, location : {lat, lng}, name},
-          placePrice,
+          friends = [],
+          manager = {},
+          placeSearch : { address, location : {lat, lng} = {}, name } = {},
+          placePrice = 0,
+          taxPrice = 0,
           TaxImg 
-        } = tripInfo
+        } = tripInfo || {}
   const sessionId = sessionStorage.getItem('userID');
   
   const getUserInfo = async () => {
@@ -28,12 +34,24 @@ const Main = () => {
 
     const trip = await Select('Trip');
     const tripFilter = trip.filter((param)=>{
-      if(param.manager === sessionId || param.friends.some((some)=>some.id === sessionId)){
+      if(param.manager.id === sessionId || param.friends.some((some)=>some.id === sessionId)){
         return param
       }
       return null
     })
     setTripInfo(tripFilter[0]);
+    setShowSpinner(false);
+  }
+
+  const calculationAmount = (sort) => {
+    switch (sort) {
+      case 'all':
+        return placePrice + taxPrice;
+      case 'one' :
+        return (placePrice + taxPrice) / (friends.length + 1)
+      default:
+        return 'error';
+    }
   }
 
   useEffect(()=>{
@@ -43,6 +61,9 @@ const Main = () => {
 
   return (
     <div className="content-wrap">
+        <>
+          {showSpinner && (<Spinner/>)}
+        </>
         <div className="user-info">
         {userInfo && (
           <dl>
@@ -62,59 +83,68 @@ const Main = () => {
         </div>
         
           {
-            tripInfo === null ?
-            <NoData txt="일정을 추가해봐요!"/>
-            :
-            
-            <div className="contain" key={sq}>
-                <h2 class="title mt-20">일정</h2>
-                <ul className="date-selector">
-                  <li>
-                      <div className="date-selector-contain">
-                          <p className="title">가는날</p>
-                          <p className="date">{goDay}</p>
+              tripInfo &&
+
+              tripInfo === null ? (<Nodata/>)
+              :
+              (
+              <div className="contain" key={sq}>
+                  {
+                  manager === sessionId && 
+                  <div className='utill-btn-wrap'>
+                    
+                  </div>
+                  }
+                  
+                  <h2 class="title mt-20">일정</h2>
+                  <ul className="date-selector">
+                    <li>
+                        <div className="date-selector-contain">
+                            <p className="title">가는날</p>
+                            <p className="date">{goDay}</p>
+                        </div>
+                    </li>
+                    <li>
+                        <div className="date-selector-contain">
+                            <p className="title">오는날</p>
+                            <p className="date">{comeDay}</p>
+                        </div>
+                    </li>
+                  </ul>
+                  <h2 class="title">인원</h2>
+                  <ul className="user_list">
+                  {
+                    <li className='king' key={manager.id}>
+                      <div className="img-wrap">
+                          <div className="img-thumb" style={{backgroundImage : `url(${manager.imgUrl ? manager.imgUrl : './images/img_user.png'})`}}></div>
                       </div>
-                  </li>
-                  <li>
-                      <div className="date-selector-contain">
-                          <p className="title">오는날</p>
-                          <p className="date">{comeDay}</p>
-                      </div>
-                  </li>
-                </ul>
-                <h2 class="title">인원</h2>
-                <ul className="user_list" style={{marginTop:'20px'}}>
-                {
-                    friends.map((param) => (
-                        <li key={param.id}>
-                            <div className="img-wrap">
-                                <div className="img-thumb" style={{backgroundImage : `url(${param.imgUrl ? param.imgUrl : './images/img_user.png'})`}}></div>
-                            </div>
-                            <p>{param.userName}</p>
-                        </li>
-                    ))
-                }
-                </ul>
-                <h2 className="title">숙소</h2>
-                <p>{lat}</p>
-                <p>{lng}</p>
-                <dl className="location-info">
-                    <dt>이름 : </dt>
-                    <dd>{name}</dd>
-                </dl>
-                <dl className="location-info">
-                    <dt>주소 : </dt>
-                    <dd>{address}</dd>
-                </dl>
-                <dl className="location-info">
-                    <dt>가격 : </dt>
-                    <dd>{placePrice}</dd>
-                </dl>
-                <h2 className="title">영수증</h2>
-                { TaxImg ? <img src={TaxImg} alt="영수증 이미지"/> : <Nodata txt='아직 이미지가 없어요!'/> }
-                <h2 class="txt-box1">총금액 : {}원</h2>
-                <h2 class="txt-box1">인당금액 : {}원</h2>
-            </div>
+                      <p>{manager.userName}</p>
+                    </li>
+                  }
+                  {
+                      friends && friends.map((param) => (
+                          <li key={param.id}>
+                              <div className="img-wrap">
+                                  <div className="img-thumb" style={{backgroundImage : `url(${param.imgUrl ? param.imgUrl : './images/img_user.png'})`}}></div>
+                              </div>
+                              <p>{param.userName}</p>
+                          </li>
+                      ))
+                  }
+                  </ul>
+                  <h2 className="title">숙소</h2>
+                  <GoogleMap location={{lat,lng}}/>
+                  <ContentRow title={'이름'} text={name}/>
+                  <ContentRow title={'주소'} text={address}/>
+                  <ContentRow title={'가격'} text={placePrice.toLocaleString()+'원'}/>
+                  
+                  <h2 className="title">영수증</h2>
+                  { TaxImg ? <img src={TaxImg} alt="영수증 이미지"/> : <Nodata txt='아직 이미지가 없어요!'/> }
+
+                  <TextBox title={'총금액'} text={`${calculationAmount('all').toLocaleString()}원`}/>
+                  <TextBox title={'인당금액'} text={`${calculationAmount('one').toLocaleString()}원`}/>
+              </div>
+            )
           }
       </div>
   )

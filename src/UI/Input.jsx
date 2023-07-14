@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 
-const Input = ({txt, id, onChange, inputType, className, accept, ipStyle}) => {
+const Input = ({txt, id, onChange, inputType, className, accept, value}) => {
   const [inputFocus,setInputFocus] = useState(false);
   const onfocusHandler = () => {
     setInputFocus(true)
@@ -21,6 +21,7 @@ const Input = ({txt, id, onChange, inputType, className, accept, ipStyle}) => {
               onFocus={()=>{onfocusHandler()}}
               onBlur={onBlurHandler}
               onChange={onChange}
+              value={value}
         />
         <span>{txt}</span>
     </label>
