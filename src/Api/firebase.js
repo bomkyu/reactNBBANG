@@ -13,6 +13,9 @@ const firebaseConfig = {
   databaseURL: process.env.REACT_APP_DATABASE_URL,
 };
 
+// Firebase 앱을 초기화합니다.
+const app = initializeApp(firebaseConfig);
+
 // Firestore Timestamp 가져오기
 const timestamp = Timestamp.now();
 
@@ -30,8 +33,7 @@ function formatTimestamp(timestamp) {
 }
 
 
-// Firebase 앱을 초기화합니다.
-const app = initializeApp(firebaseConfig);
+
 
 // 필요한 Firebase 서비스를 가져옵니다.
 export const db = getFirestore(app);
@@ -99,13 +101,24 @@ export const Update = async (fbCollection, sq, obj) => {
   }
 }
 
-export const Delete = async (fbCollection, sq) => {
-  try {
-    const deleteDocRef = doc(collection(db, fbCollection), sq); // 문서 참조 생성
-    await deleteDoc(deleteDocRef);
-  } catch (error) {
-    return alert(`에러발생! ${error}`)
+export const Delete = async (fbCollection, sq, callback) => {
+  if(window.confirm('정말로 삭제하실껀가요?')){
+    try {
+      const deleteDocRef = doc(collection(db, fbCollection), sq); // 문서 참조 생성
+      await deleteDoc(deleteDocRef);
+
+      if (typeof callback === 'function') {
+        callback(); // callback 호출
+      }
+
+    } catch (error) {
+      return alert(`에러발생! ${error}`)
+    }
+  }else{
+
   }
+  
+  
 }
 
 /*

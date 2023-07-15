@@ -1,16 +1,14 @@
 import React, { useEffect, useState } from 'react'
-import {Select} from '../Api/firebase'
+import { useNavigate } from 'react-router-dom';
+import {Select, Delete} from '../Api/firebase'
 
-import NoData from '../UI/Nodata'
+
 import Nodata from '../UI/Nodata';
 import TextBox from '../UI/TextBox';
 import ContentRow from '../UI/ContentRow';
 import Spinner from '../UI/Spinner';
 import GoogleMap from '../Api/GoogleMap';
-/*
-  firebase Cloud
-  1. collection 구분 (firebase/firestore)
-*/
+
 const Main = () => {
   const [userInfo, setUserInfo] = useState(null);
   const [tripInfo, setTripInfo] = useState(null);
@@ -27,7 +25,11 @@ const Main = () => {
           TaxImg 
         } = tripInfo || {}
   const sessionId = sessionStorage.getItem('userID');
-  
+  const navigate = useNavigate();
+  const tripCallback = () =>{
+    setTripInfo(null);
+  }
+
   const getUserInfo = async () => {
     const my = await Select('User', {field : 'id', operator : '==', value : sessionId })
     setUserInfo(my[0]);
@@ -37,18 +39,20 @@ const Main = () => {
       if(param.manager.id === sessionId || param.friends.some((some)=>some.id === sessionId)){
         return param
       }
-      return null
+      return null;
     })
-    setTripInfo(tripFilter[0]);
+    if(tripFilter.length !== 0){
+      setTripInfo(tripFilter[0]);
+    }
     setShowSpinner(false);
   }
 
   const calculationAmount = (sort) => {
     switch (sort) {
       case 'all':
-        return placePrice + taxPrice;
+        return Math.floor(placePrice + taxPrice);
       case 'one' :
-        return (placePrice + taxPrice) / (friends.length + 1)
+        return Math.floor((placePrice + taxPrice) / (friends.length + 1))
       default:
         return 'error';
     }
@@ -81,18 +85,24 @@ const Main = () => {
           </dl>
           )}
         </div>
-        
-          {
+            {
+              tripInfo === null && (<Nodata txt="일정이 없어요!"/>)
+            }
+            {
               tripInfo &&
-
-              tripInfo === null ? (<Nodata/>)
-              :
               (
               <div className="contain" key={sq}>
                   {
-                  manager === sessionId && 
+                  manager.id === sessionId && 
                   <div className='utill-btn-wrap'>
-                    
+                    <ul>
+                      <li onClick={()=>navigate(`/modify/${sq}`)}>
+                        수정
+                      </li>
+                      <li onClick={()=>Delete('Trip', sq, tripCallback)}>
+                        삭제
+                      </li>
+                    </ul>
                   </div>
                   }
                   

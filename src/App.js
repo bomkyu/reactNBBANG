@@ -34,6 +34,7 @@ function App() {
           <Route path='/friend' element={<Friend/>} />
           <Route path='/view' element={<View/>} />
           <Route path='/write' element={<Write/>} />
+          <Route path="/modify/:sq" element={<Write/>} />
         </Routes>
       {location.pathname !== '/' && location.pathname !== '/register' && <BottomBar/>} {/*useLocation을 이용해서 Login, register페이지 header렌더링 안되게 분기처리*/}
     </div>

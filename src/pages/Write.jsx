@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react'
-import { FriendSelect, Insert, imageUpload, Select } from '../Api/firebase';
+import { useParams } from 'react-router-dom';
+import { FriendSelect, Insert, imageUpload, Select, Update } from '../Api/firebase';
 import SearchLocationInput from '../Api/googlePlace';
 import imageCompression from "browser-image-compression";
 import {stringNumberToInt} from "../userFunc"
@@ -14,21 +15,39 @@ const Write = () => {
     const [myInfo, setMyInfo] = useState({})
     const [friend, setFriend] = useState([]);
     const [modal, setModal] = useState({isOpen : false, type : ''});
-    const [inputs, setInputs] = useState({ goDay : "2023-07-05", comeDay: "2023-08-05", friends: null, placeSearch: null, placePrice: null, taxPrice: null});
+    const [inputs, setInputs] = useState(
+        { 
+            goDay : "2023-07-05",
+            comeDay: "2023-08-05",
+            friends: '',
+            placeSearch: '',
+            placePrice: '',
+            taxPrice: ''
+        });
     const [previewImage, setPreviewImage] = useState(null); //preivew
     const [saveImage, setSaveImage] = useState(null); //preivew
     const fileInput = useRef(null); //해당 돔을 선택하는것. javascript로는 querrySelector
     const {goDay, comeDay, friends, placeSearch, placePrice, taxPrice} = inputs;
+    
     const navigate = useNavigate();
 
+    let { sq } = useParams();
+
     //친구목록 가져오기
-
     const fetchData = async () => {
-      let usersData = await FriendSelect(`${sessionId}`,handleFriendData);
-      filterFriend(usersData);
-
+    
       const my = await Select('User', {field : 'id', operator : '==', value : sessionId })
       setMyInfo(my[0]);
+      
+      if(sq){
+        const modifyData = await Select('Trip', {field : 'sq', operator : '==', value : sq })
+        const { goDay, comeDay, friends, placeSearch, placePrice, taxPrice } = modifyData[0]
+        setInputs({goDay, comeDay, placeSearch, placePrice, taxPrice})
+        setFriend(friends.map((param)=>({...param, selected : true})))
+      }else{
+        const usersData = await FriendSelect(`${sessionId}`,handleFriendData);
+        filterFriend(usersData);
+      }
     };
 
     //snapShot에서 Event가 있을 경우 콜백되는 함수
@@ -153,18 +172,31 @@ const Write = () => {
             imageUpload(saveImage)
             .then(url => {
                 obj.TaxImg = url
-                return Insert('Trip', obj);
+                if(!sq){
+                    return Insert('Trip', obj);
+                }else{
+                    return Update('Trip', sq , obj);
+                }
             })
             .then(()=>{
                 navigate('/main', { replace: true });
             })
             .catch((error)=>{return alert(`에러발생! ${error}`)});
           }else{ //이미지가 Null일때
-            Insert('Trip', obj)
-            .then(()=> {
-                navigate('/main', { replace: true });
-            })
-            .catch((error)=>{return alert(`에러발생! ${error}`)});
+            if(!sq){
+                return Insert('Trip', obj)
+                .then(()=> {
+                    navigate('/main', { replace: true });
+                })
+                .catch((error)=>{return alert(`에러발생! ${error}`)});
+            }else{
+                return Update('Trip', sq , obj)
+                .then(()=> {
+                    navigate('/main', { replace: true });
+                })
+                .catch((error)=>{return alert(`에러발생! ${error}`)});
+            }
+            
           }
     }
 
