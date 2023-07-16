@@ -13,6 +13,7 @@ const Main = () => {
   const [userInfo, setUserInfo] = useState(null);
   const [tripInfo, setTripInfo] = useState(null);
   const [showSpinner, setShowSpinner] = useState(true);
+  const [showMap, setShowMap] = useState(true); //구글맵
   const { 
           sq,
           goDay, 
@@ -60,6 +61,10 @@ const Main = () => {
 
   useEffect(()=>{
     getUserInfo();
+    setShowMap(true);
+    return ()=>{
+      setShowMap(false); //화면이 언마운트 되면 구글맵 안보여줌
+    }
   },[])
 
 
@@ -73,7 +78,7 @@ const Main = () => {
           <dl>
               <dt>
                   <div className="img-wrap">
-                      <div className="img-thumb" style={{backgroundImage : `url(${userInfo.imgUrl ? userInfo.imgUrl : './images/img_user.png'})`}}></div>
+                      <div className="img-thumb" style={{backgroundImage : `url(${userInfo.imgUrl ? userInfo.imgUrl : '../images/img_user.png'})`}}></div>
                   </div>
               </dt>
               <dd>
@@ -97,16 +102,16 @@ const Main = () => {
                   <div className='utill-btn-wrap'>
                     <ul>
                       <li onClick={()=>navigate(`/modify/${sq}`)}>
-                        수정
+
                       </li>
                       <li onClick={()=>Delete('Trip', sq, tripCallback)}>
-                        삭제
+
                       </li>
                     </ul>
                   </div>
                   }
                   
-                  <h2 class="title mt-20">일정</h2>
+                  <h2 className="title mt-20">일정</h2>
                   <ul className="date-selector">
                     <li>
                         <div className="date-selector-contain">
@@ -121,12 +126,12 @@ const Main = () => {
                         </div>
                     </li>
                   </ul>
-                  <h2 class="title">인원</h2>
+                  <h2 className="title">인원</h2>
                   <ul className="user_list">
                   {
                     <li className='king' key={manager.id}>
                       <div className="img-wrap">
-                          <div className="img-thumb" style={{backgroundImage : `url(${manager.imgUrl ? manager.imgUrl : './images/img_user.png'})`}}></div>
+                          <div className="img-thumb" style={{backgroundImage : `url(${manager.imgUrl ? manager.imgUrl : '../images/img_user.png'})`}}></div>
                       </div>
                       <p>{manager.userName}</p>
                     </li>
@@ -135,7 +140,7 @@ const Main = () => {
                       friends && friends.map((param) => (
                           <li key={param.id}>
                               <div className="img-wrap">
-                                  <div className="img-thumb" style={{backgroundImage : `url(${param.imgUrl ? param.imgUrl : './images/img_user.png'})`}}></div>
+                                  <div className="img-thumb" style={{backgroundImage : `url(${param.imgUrl ? param.imgUrl : '../images/img_user.png'})`}}></div>
                               </div>
                               <p>{param.userName}</p>
                           </li>
@@ -143,7 +148,8 @@ const Main = () => {
                   }
                   </ul>
                   <h2 className="title">숙소</h2>
-                  <GoogleMap location={{lat,lng}}/>
+                  {showMap && <GoogleMap location={{lat,lng}}/>}
+                  
                   <ContentRow title={'이름'} text={name}/>
                   <ContentRow title={'주소'} text={address}/>
                   <ContentRow title={'가격'} text={placePrice.toLocaleString()+'원'}/>

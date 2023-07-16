@@ -12,6 +12,7 @@ import Nodata from '../UI/Nodata';
 
 const Write = () => {
     const sessionId = sessionStorage.getItem('userID');
+    
     const [myInfo, setMyInfo] = useState({})
     const [friend, setFriend] = useState([]);
     const [modal, setModal] = useState({isOpen : false, type : ''});
@@ -25,7 +26,7 @@ const Write = () => {
             taxPrice: ''
         });
     const [previewImage, setPreviewImage] = useState(null); //preivew
-    const [saveImage, setSaveImage] = useState(null); //preivew
+    const [saveImage, setSaveImage] = useState(null); //saveImage
     const fileInput = useRef(null); //해당 돔을 선택하는것. javascript로는 querrySelector
     const {goDay, comeDay, friends, placeSearch, placePrice, taxPrice} = inputs;
     
@@ -33,19 +34,37 @@ const Write = () => {
 
     let { sq } = useParams();
 
-    //친구목록 가져오기
+    //데이터 가져오는 함수
     const fetchData = async () => {
     
       const my = await Select('User', {field : 'id', operator : '==', value : sessionId })
+      const usersData = await FriendSelect(`${sessionId}`,handleFriendData);
       setMyInfo(my[0]);
       
       if(sq){
         const modifyData = await Select('Trip', {field : 'sq', operator : '==', value : sq })
-        const { goDay, comeDay, friends, placeSearch, placePrice, taxPrice } = modifyData[0]
-        setInputs({goDay, comeDay, placeSearch, placePrice, taxPrice})
-        setFriend(friends.map((param)=>({...param, selected : true})))
+        const { goDay, comeDay, friends, placeSearch, placePrice, taxPrice, TaxImg } = modifyData[0]
+        setInputs(
+            {
+                goDay,
+                comeDay,
+                placeSearch,
+                placePrice : placePrice.toLocaleString(),
+                taxPrice : taxPrice.toLocaleString()
+            }
+        ) //인풋 정보
+        setPreviewImage(TaxImg) //Priview이미지
+        const filterFriends = usersData
+        .filter((param) => param.request?.status === 'accept' && param.request?.status !== null)
+        .map((param) => { 
+            const isFriendSelected = friends.some((user) => param.id === user.id);
+            return {
+            ...param,
+            selected: isFriendSelected,
+            };
+        });
+        setFriend(filterFriends)
       }else{
-        const usersData = await FriendSelect(`${sessionId}`,handleFriendData);
         filterFriend(usersData);
       }
     };
@@ -63,8 +82,7 @@ const Write = () => {
         setFriend(filterFriends); //친구 스테이트
     }
 
-    useEffect(()=> {
-        
+    useEffect(()=> {  
         fetchData();
     }, [])
     
@@ -190,6 +208,7 @@ const Write = () => {
                 })
                 .catch((error)=>{return alert(`에러발생! ${error}`)});
             }else{
+                obj.TaxImg = previewImage
                 return Update('Trip', sq , obj)
                 .then(()=> {
                     navigate('/main', { replace: true });
@@ -210,13 +229,13 @@ const Write = () => {
                     <li>
                         <div className="date-selector-contain" onClick={()=>openModal('full')}>
                             <p className="title">가는날</p>
-                            <p className="date" id="go-date">06.20일</p>
+                            <p className="date" id="go-date">{goDay}</p>
                         </div>
                     </li>
                     <li>
                         <div className="date-selector-contain" onClick={()=>openModal('full')}>
                             <p className="title">오는날</p>
-                            <p className="date" id="come-date">06.20일</p>
+                            <p className="date" id="come-date">{comeDay}</p>
                         </div>
                     </li>
                 </ul>
@@ -230,7 +249,7 @@ const Write = () => {
                             filteredFriends.map((param) => (
                                 <li onClick={()=>onClickHandler(param.id)} key={param.id}>
                                     <div className="img-wrap">
-                                        <div className="img-thumb" style={{backgroundImage : `url(${param.imgUrl ? param.imgUrl : './images/img_user.png'})`}}></div>
+                                        <div className="img-thumb" style={{backgroundImage : `url(${param.imgUrl ? param.imgUrl : '../images/img_user.png'})`}}></div>
                                     </div>
                                     <p>{param.userName}</p>
                                 </li>
@@ -271,7 +290,7 @@ const Write = () => {
                         <Input txt="구매 물품 가격" id="taxPrice" onChange={onChangeHandler} inputType="text" value={taxPrice}/>
                     </div>
                 </section>
-                <button className="btn btn-st1" type="submit"><p>등록</p></button>
+                <button className="btn btn-st1" type="submit"><p>{sq ? '수정' : '등록'}</p></button>
             </form>
             </div>  
             <Modal value={modal} data={friend} close={closeModal} onClick={onClickHandler}/>

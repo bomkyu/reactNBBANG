@@ -6,11 +6,6 @@ const containerStyle = {
   height: '400px'
 };
 
-const center = {
-  lat: 37.7749,
-  lng: -122.4194
-};
-
 const MapComponent = ({location}) => {
   return (
     <LoadScript googleMapsApiKey='AIzaSyAQRIT2tpNRKu9hleY2y7XHil4qxRyFGv8'>

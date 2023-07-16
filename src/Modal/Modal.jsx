@@ -1,6 +1,5 @@
 import React from 'react'
 const Modal = ({value : { isOpen, type }, close, data, onClick}) => {
-  console.log(data);
   return (
     <div className={`modal-wrap ${isOpen && 'active'} ${type}`}>
         <div className="modal-contain">
@@ -13,7 +12,7 @@ const Modal = ({value : { isOpen, type }, close, data, onClick}) => {
                     <dl className={`friend-list ${param.selected ? 'active': ''}`} key={param.id} onClick={()=>onClick(param.id)}>
                       <dt>
                         <div className="img-wrap">
-                          <div className="img-thumb" style={{backgroundImage : `url(${param.imgUrl ? param.imgUrl : './images/img_user.png'})`}}></div>
+                          <div className="img-thumb" style={{backgroundImage : `url(${param.imgUrl ? param.imgUrl : '../images/img_user.png'})`}}></div>
                         </div>
                       </dt>
                       <dd>
