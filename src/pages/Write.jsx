@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import { FriendSelect, Insert, imageUpload, Select, Update } from '../Api/firebase';
 import SearchLocationInput from '../Api/googlePlace';
 import imageCompression from "browser-image-compression";
-import {stringNumberToInt} from "../userFunc"
+import {stringNumberToInt, dateFormant} from "../userFunc"
 
 import {useNavigate} from "react-router-dom";
 import Input from '../UI/Input'
@@ -18,8 +18,8 @@ const Write = () => {
     const [modal, setModal] = useState({isOpen : false, type : ''});
     const [inputs, setInputs] = useState(
         { 
-            goDay : "2023-07-05",
-            comeDay: "2023-08-05",
+            goDay : '',
+            comeDay: '',
             friends: '',
             placeSearch: '',
             placePrice: '',
@@ -84,6 +84,7 @@ const Write = () => {
 
     useEffect(()=> {  
         fetchData();
+        
     }, [])
     
     const openModal = (type) => {
@@ -130,6 +131,11 @@ const Write = () => {
         const updateFriendsFilter = updatedFriends.filter(param => param.selected === true).map(param=>({id : param.id, userName : param.userName, imgUrl : param.imgUrl}));
         setInputs({...inputs, friends : updateFriendsFilter});
     }
+
+    const dateChangeHandler = (date) => {
+        const { startDate, endDate } = date[0];
+        setInputs((param)=>({ ...param, goDay : dateFormant(startDate), comeDay : dateFormant(endDate)}))
+    }
     
     const placeInformation = (data) => {
         const {
@@ -174,8 +180,29 @@ const Write = () => {
         fileInput.current.click();
     }
 
+    const exceptionHandler = () => {
+        if (goDay === '' || comeDay === '') {
+            return '날짜를 선택해 주세요.';
+        }
+        if (friend.length === 0) {
+            return '친구를 선택해 주세요.';
+        }
+        if (placeSearch === '') {
+            return '숙소를 선택해 주세요.';
+        }
+        if (placePrice === '') {
+            return '숙소의 금액을 입력해 주세요.';
+        }
+        return null;
+    }
+
     const submit = async (e) => {
         e.preventDefault();
+        const exceptionMessage = exceptionHandler();
+        if (exceptionMessage) {
+            alert(exceptionMessage);
+            return;
+        }
         const obj = {...inputs,
             placePrice : stringNumberToInt(placePrice),
             taxPrice : stringNumberToInt(taxPrice),
@@ -292,8 +319,9 @@ const Write = () => {
                 </section>
                 <button className="btn btn-st1" type="submit"><p>{sq ? '수정' : '등록'}</p></button>
             </form>
-            </div>  
-            <Modal value={modal} data={friend} close={closeModal} onClick={onClickHandler}/>
+            </div>
+            
+            <Modal value={modal} data={friend} close={closeModal} onClick={onClickHandler} dateChange={dateChangeHandler}/>
         </>
     )
 }

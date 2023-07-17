@@ -57,8 +57,8 @@ header > p > img { width: 34px; }
 .input-st.active input { padding-top:17px;  }
 .input-st.active span { transform: scale(calc(10 / 12)) translateY(-10px); }
 
-.input-st span { position:absolute; padding-left: 7px; top:0; left: 0; transform-origin: left; transition: 0.3s; line-height: 38px; color:#8e8e8e; }
-.input-st input { width: 100%; height: 100%; padding: 9px 0 4px 7px; border-bottom: 1px solid #CCC; }
+.input-st span { position:absolute; top:0; left: 0; transform-origin: left; transition: 0.3s; line-height: 38px; color:#8e8e8e; }
+.input-st input { width: 100%; height: 100%; padding: 9px 0 4px 0; border-bottom: 1px solid #CCC; }
 
 .input-st.search > a { position: absolute; width: 50px; height: 49px; top: 0; right: 0; background: #FFF url('/public/images/ic_search.png') center center/60% no-repeat; }
 .input-st.search > input { padding-right: 50px; }
@@ -104,7 +104,7 @@ header > p > img { width: 34px; }
 .modal-wrap { position: fixed; display: flex; width: 100%; height: 100%; bottom: -100%; left: 0; background-color: #FFF; z-index: 999; transition: 0.3s; box-shadow: 1px -3px 6px 0 #eee;}
 .modal-wrap.h_80 { height: 60vh; } /* class에 h_80이 들어가 있을때 */
 .modal-wrap.active { bottom: 0; transform: translateZ(0); }
-.modal-wrap .modal-header { position: relative; height: 40px; border-top: 1px solid #eee; }
+.modal-wrap .modal-header { position: relative; height: 60px; border-top: 1px solid #eee; }
 .modal-contain { width: 100%; height: 100%; }
 .modal-wrap .modal-content { padding: 10px; height: calc(100% - 40px); overflow: auto; }
 

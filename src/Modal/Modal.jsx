@@ -1,5 +1,6 @@
 import React from 'react'
-const Modal = ({value : { isOpen, type }, close, data, onClick}) => {
+import Calendar from '../UI/Calendar'
+const Modal = ({value : { isOpen, type }, close, data, onClick, dateChange}) => {
   return (
     <div className={`modal-wrap ${isOpen && 'active'} ${type}`}>
         <div className="modal-contain">
@@ -24,7 +25,7 @@ const Modal = ({value : { isOpen, type }, close, data, onClick}) => {
                   
                 )
                 :
-                <>나는 달력이야!</>
+                <Calendar dateChange={dateChange}/>
               }
             </div>
       </div>

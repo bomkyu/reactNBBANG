@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 
 const Input = ({txt, id, onChange, inputType, className, accept, value}) => {
   const [inputFocus,setInputFocus] = useState(false);
@@ -12,8 +12,17 @@ const Input = ({txt, id, onChange, inputType, className, accept, value}) => {
     }
   }
 
+   // useEffect를 사용하여 컴포넌트가 마운트될 때 실행되도록 설정
+   useEffect(() => {
+    console.log('gdgd', value);
+    // value가 비어있지 않으면 setInputFocus(true) 호출
+    if (value && value !== '') {
+      setInputFocus(true);
+    }
+  }, []);
+
   return (
-    <label className={inputFocus === true ? 'input-st active' : 'input-st'} name={id} >
+    <label className={(inputFocus === true ? 'input-st active' : 'input-st') || (value && 'input-st active')} name={id} >
         <input type={inputType} 
               id={id} 
               className={className && `${className}`}
