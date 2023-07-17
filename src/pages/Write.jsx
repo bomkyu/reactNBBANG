@@ -133,8 +133,8 @@ const Write = () => {
     }
 
     const dateChangeHandler = (date) => {
-        const { startDate, endDate } = date[0];
-        setInputs((param)=>({ ...param, goDay : dateFormant(startDate), comeDay : dateFormant(endDate)}))
+        //const { startDate, endDate } = date[0];
+        //setInputs((param)=>({ ...param, goDay : dateFormant(startDate), comeDay : dateFormant(endDate)}))
     }
     
     const placeInformation = (data) => {
@@ -321,7 +321,7 @@ const Write = () => {
             </form>
             </div>
             
-            <Modal value={modal} data={friend} close={closeModal} onClick={onClickHandler} dateChange={dateChangeHandler}/>
+            <Modal value={modal} data={friend} close={closeModal} onClick={onClickHandler} dateChange={dateChangeHandler} date={{goDay, comeDay}}/>
         </>
     )
 }

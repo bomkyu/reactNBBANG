@@ -1,10 +1,12 @@
 import React from 'react'
 import Calendar from '../UI/Calendar'
-const Modal = ({value : { isOpen, type }, close, data, onClick, dateChange}) => {
+const Modal = ({value : { isOpen, type }, close, data, onClick, dateChange, date}) => {
   return (
     <div className={`modal-wrap ${isOpen && 'active'} ${type}`}>
         <div className="modal-contain">
-            <div className="modal-header" onClick={close}></div>
+            <div className="modal-header" onClick={close}>
+              <>{type === 'full' && <p className='title'>달력</p>}</>
+            </div>
             <div className="modal-content">
               { 
                 type === 'h_80' ? 
@@ -25,7 +27,7 @@ const Modal = ({value : { isOpen, type }, close, data, onClick, dateChange}) => 
                   
                 )
                 :
-                <Calendar dateChange={dateChange}/>
+                <Calendar dateChange={dateChange} date={date}/>
               }
             </div>
       </div>

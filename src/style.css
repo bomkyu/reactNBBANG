@@ -104,7 +104,8 @@ header > p > img { width: 34px; }
 .modal-wrap { position: fixed; display: flex; width: 100%; height: 100%; bottom: -100%; left: 0; background-color: #FFF; z-index: 999; transition: 0.3s; box-shadow: 1px -3px 6px 0 #eee;}
 .modal-wrap.h_80 { height: 60vh; } /* class에 h_80이 들어가 있을때 */
 .modal-wrap.active { bottom: 0; transform: translateZ(0); }
-.modal-wrap .modal-header { position: relative; height: 60px; border-top: 1px solid #eee; }
+.modal-wrap .modal-header { position: relative; display: flex; width: 100%; height: 60px; padding: 0 10px; border-top: 1px solid #eee; align-items: center; }
+.modal-wrap .modal-header .title { font-size: 18px; font-weight: bold; }
 .modal-contain { width: 100%; height: 100%; }
 .modal-wrap .modal-content { padding: 10px; height: calc(100% - 40px); overflow: auto; }
 

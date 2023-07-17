@@ -14,7 +14,6 @@ const Input = ({txt, id, onChange, inputType, className, accept, value}) => {
 
    // useEffect를 사용하여 컴포넌트가 마운트될 때 실행되도록 설정
    useEffect(() => {
-    console.log('gdgd', value);
     // value가 비어있지 않으면 setInputFocus(true) 호출
     if (value && value !== '') {
       setInputFocus(true);
