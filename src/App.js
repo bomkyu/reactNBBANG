@@ -8,7 +8,7 @@ import Register from './pages/Register';
 import Friend from './pages/Friend';
 import Write from './pages/Write';
 import Main from './pages/Main';
-
+import NotFound from './pages/NotFound'
 
 function App() {
   let location = useLocation();
@@ -18,7 +18,7 @@ function App() {
         <Routes>
           <Route path='/' element={<Login/>} />
           <Route path='/register' element={<Register/>} />
-
+          <Route path='/*' element={<NotFound/>} />
           {/* 
             PrivateRoute사용할려면 기존 Route컴포넌트에 개별적으로 넣어줬던것에서 <PrivateRouter path="/write" element={<Write />}/>
             react-router-dom V6에서는

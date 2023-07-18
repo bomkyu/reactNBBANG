@@ -3,12 +3,15 @@ import { useParams } from 'react-router-dom';
 import { FriendSelect, Insert, imageUpload, Select, Update } from '../Api/firebase';
 import SearchLocationInput from '../Api/googlePlace';
 import imageCompression from "browser-image-compression";
+import { addDays, parseISO } from "date-fns"
+
 import {stringNumberToInt, dateFormant} from "../userFunc"
 
 import {useNavigate} from "react-router-dom";
 import Input from '../UI/Input'
 import Modal from '../Modal/Modal'
 import Nodata from '../UI/Nodata';
+import Spinner from '../UI/Spinner'
 
 const Write = () => {
     const sessionId = sessionStorage.getItem('userID');
@@ -18,8 +21,8 @@ const Write = () => {
     const [modal, setModal] = useState({isOpen : false, type : ''});
     const [inputs, setInputs] = useState(
         { 
-            goDay : '',
-            comeDay: '',
+            goDay : dateFormant(new Date()),
+            comeDay: dateFormant(addDays(new Date(), 1)),
             friends: '',
             placeSearch: '',
             placePrice: '',
@@ -67,6 +70,8 @@ const Write = () => {
       }else{
         filterFriend(usersData);
       }
+
+      
     };
 
     //snapShot에서 Event가 있을 경우 콜백되는 함수
@@ -133,8 +138,9 @@ const Write = () => {
     }
 
     const dateChangeHandler = (date) => {
-        //const { startDate, endDate } = date[0];
-        //setInputs((param)=>({ ...param, goDay : dateFormant(startDate), comeDay : dateFormant(endDate)}))
+        
+        const { startDate, endDate } = date[0];
+        setInputs((param)=>({ ...param, goDay : dateFormant(startDate), comeDay : dateFormant(endDate)}))
     }
     
     const placeInformation = (data) => {
@@ -321,7 +327,7 @@ const Write = () => {
             </form>
             </div>
             
-            <Modal value={modal} data={friend} close={closeModal} onClick={onClickHandler} dateChange={dateChangeHandler} date={{goDay, comeDay}}/>
+            {<Modal value={modal} data={friend} close={closeModal} onClick={onClickHandler} dateChange={dateChangeHandler} date={[{startDate:parseISO(goDay), endDate:parseISO(comeDay), key:'selection'}]}/>}
         </>
     )
 }
