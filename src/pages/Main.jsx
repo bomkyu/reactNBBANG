@@ -156,6 +156,7 @@ const Main = () => {
                   
                   <h2 className="title">영수증</h2>
                   { TaxImg ? <img src={TaxImg} alt="영수증 이미지"/> : <Nodata txt='아직 이미지가 없어요!'/> }
+                  <ContentRow title={'금액'} text={taxPrice.toLocaleString()+'원'}/>
 
                   <TextBox title={'총금액'} text={`${calculationAmount('all').toLocaleString()}원`}/>
                   <TextBox title={'인당금액'} text={`${calculationAmount('one').toLocaleString()}원`}/>

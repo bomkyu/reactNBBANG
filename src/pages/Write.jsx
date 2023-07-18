@@ -25,9 +25,9 @@ const Write = () => {
             goDay : dateFormant(new Date()),
             comeDay: dateFormant(addDays(new Date(), 1)),
             friends: '',
-            placeSearch: '',
+            placeSearch: null,
             placePrice: '',
-            taxPrice: ''
+            taxPrice: '0'
         });
     const [previewImage, setPreviewImage] = useState(null); //preivew
     const [saveImage, setSaveImage] = useState(null); //saveImage
@@ -208,6 +208,11 @@ const Write = () => {
         }
         if (placePrice === '') {
             return '숙소의 금액을 입력해 주세요.';
+        }
+        if (previewImage !== null){
+            if(taxPrice === '0'){
+                return '영수증 금액을 입력해 주세요.';
+            }
         }
         return null;
     }
