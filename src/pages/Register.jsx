@@ -155,7 +155,7 @@ const Register = () => {
             </div>
             {formFields.map((filed)=> (
               <div key={filed.sq} className="input-st-wrap">
-                <Input txt={filed.txt} id={filed.id} inputType={filed.type} onChange={onChangeHandler}/>
+                <Input txt={filed.txt} id={filed.id} inputType={filed.type} onChange={onChangeHandler} value={filed.value}/>
                 {filed.ex && <p className='ex'>{filed.ex}</p>}
                 {<span className={`check ${filed.check === true ? 'true' : filed.check === false ? 'false' : ''}`}></span>}
               </div>

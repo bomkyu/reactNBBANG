@@ -1,21 +1,22 @@
 import React, { useEffect, useState, useRef } from 'react'
-import { useParams } from 'react-router-dom';
+import { useNavigate, Link, useParams } from 'react-router-dom';
 import { FriendSelect, Insert, imageUpload, Select, Update } from '../Api/firebase';
-import SearchLocationInput from '../Api/googlePlace';
-import imageCompression from "browser-image-compression";
 import { addDays, parseISO } from "date-fns"
+import SearchLocationInput from '../Api/googlePlace';
+
+import imageCompression from "browser-image-compression";
 
 import {stringNumberToInt, dateFormant} from "../userFunc"
 
-import {useNavigate} from "react-router-dom";
 import Input from '../UI/Input'
 import Modal from '../Modal/Modal'
 import Nodata from '../UI/Nodata';
-import Spinner from '../UI/Spinner'
 
 const Write = () => {
     const sessionId = sessionStorage.getItem('userID');
-    
+    const navigate = useNavigate();
+    let { sq } = useParams();
+
     const [myInfo, setMyInfo] = useState({})
     const [friend, setFriend] = useState([]);
     const [modal, setModal] = useState({isOpen : false, type : ''});
@@ -33,47 +34,52 @@ const Write = () => {
     const fileInput = useRef(null); //해당 돔을 선택하는것. javascript로는 querrySelector
     const {goDay, comeDay, friends, placeSearch, placePrice, taxPrice} = inputs;
     
-    const navigate = useNavigate();
-
-    let { sq } = useParams();
-
-    //데이터 가져오는 함수
-    const fetchData = async () => {
+     //데이터 가져오는 함수
+     const fetchData = async () => {
     
-      const my = await Select('User', {field : 'id', operator : '==', value : sessionId })
-      const usersData = await FriendSelect(`${sessionId}`,handleFriendData);
-      setMyInfo(my[0]);
-      
-      if(sq){
-        const modifyData = await Select('Trip', {field : 'sq', operator : '==', value : sq })
-        const { goDay, comeDay, friends, placeSearch, placePrice, taxPrice, TaxImg } = modifyData[0]
-        setInputs(
-            {
-                goDay,
-                comeDay,
-                placeSearch,
-                placePrice : placePrice.toLocaleString(),
-                taxPrice : taxPrice.toLocaleString()
+        const my = await Select('User', {field : 'id', operator : '==', value : sessionId })
+        if(!sq){
+            const trip = await Select('Trip')
+            const tripInfo = trip.filter(param => {
+                const hasMyId = param.manager.id === sessionId || (param.friends.some(p => p.id === sessionId));
+                return hasMyId;
+            });
+            if(tripInfo.length != 0 ){
+                alert('이미 일정이 있어요');
+                return navigate(-1);
             }
-        ) //인풋 정보
-        setPreviewImage(TaxImg) //Priview이미지
-        const filterFriends = usersData
-        .filter((param) => param.request?.status === 'accept' && param.request?.status !== null)
-        .map((param) => { 
-            const isFriendSelected = friends.some((user) => param.id === user.id);
-            return {
-            ...param,
-            selected: isFriendSelected,
-            };
-        });
-        setFriend(filterFriends)
-      }else{
-        filterFriend(usersData);
-      }
-
+        }
+        const usersData = await FriendSelect(`${sessionId}`,handleFriendData);
+        setMyInfo(my[0]);
+        
+        if(sq){
+          const modifyData = await Select('Trip', {field : 'sq', operator : '==', value : sq })
+          const { goDay, comeDay, friends, placeSearch, placePrice, taxPrice, TaxImg } = modifyData[0]
+          setInputs(
+              {
+                  goDay,
+                  comeDay,
+                  placeSearch,
+                  placePrice : placePrice.toLocaleString(),
+                  taxPrice : taxPrice.toLocaleString()
+              }
+          ) //인풋 정보
+          setPreviewImage(TaxImg) //Priview이미지
+          const filterFriends = usersData
+          .filter((param) => param.request?.status === 'accept' && param.request?.status !== null)
+          .map((param) => { 
+              const isFriendSelected = friends.some((user) => param.id === user.id);
+              return {
+              ...param,
+              selected: isFriendSelected,
+              };
+          });
+          setFriend(filterFriends)
+        }else{
+          filterFriend(usersData);
+        }
+      };
       
-    };
-
     //snapShot에서 Event가 있을 경우 콜백되는 함수
     const handleFriendData = (data) => {
         filterFriend(data);
@@ -88,6 +94,8 @@ const Write = () => {
     }
 
     useEffect(()=> {  
+
+        //일정이 있을경우 메인페이지로 이동
         fetchData();
         
     }, [])
@@ -137,12 +145,14 @@ const Write = () => {
         setInputs({...inputs, friends : updateFriendsFilter});
     }
 
+    //달력에서 전달받은 날짜.
     const dateChangeHandler = (date) => {
         
         const { startDate, endDate } = date[0];
         setInputs((param)=>({ ...param, goDay : dateFormant(startDate), comeDay : dateFormant(endDate)}))
     }
     
+    //googlePlace에서 받아온 데이터 함수
     const placeInformation = (data) => {
         const {
             formatted_address, 
@@ -324,6 +334,7 @@ const Write = () => {
                     </div>
                 </section>
                 <button className="btn btn-st1" type="submit"><p>{sq ? '수정' : '등록'}</p></button>
+                <Link className="btn btn-st1" to='/main'><p>취소</p></Link>
             </form>
             </div>
             

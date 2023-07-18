@@ -13,7 +13,7 @@ const Login = () => {
     e.preventDefault();
 
     if(id === '' || password === ''){
-      alert('얘! 아이디나 패스워드좀 확인하렴!')
+      alert('아이디나 패스워드를 확인해 주세요.')
       return;
     }
 
@@ -29,7 +29,7 @@ const Login = () => {
           sessionStorage.setItem('userID', doc.data().id);
           navigate('/main', { replace: true });
         }else{
-          alert('얘! 아이디나 패스워드좀 확인하렴!');
+          alert('아이디나 패스워드를 확인해 주세요.');
         }
       });
     } catch (error) {
@@ -52,11 +52,11 @@ const Login = () => {
           <form method="post" onSubmit={handleSubmit}>
               <h1 className="login-tit">로그인</h1>
               <div className="input-st-wrap">
-                <Input txt="아이디" id="id" inputType="text" onChange={onChangeHandler}/>
+                <Input txt="아이디" id="id" inputType="text" onChange={onChangeHandler} value={id}/>
               </div>
 
               <div className="input-st-wrap">
-                <Input txt="패스워드" id="pw" inputType="password" onChange={onChangeHandler}/>
+                <Input txt="패스워드" id="pw" inputType="password" onChange={onChangeHandler} value={password}/>
               </div>
 
               <button className="btn btn-st1" type="submit"><p>로그인</p></button>
