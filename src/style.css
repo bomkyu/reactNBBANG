@@ -4,8 +4,8 @@ h2.title { margin: 40px 0 20px 0; font-size: 26px; font-weight: bold; }
 
 /* header */
 header { position: fixed; display: flex; width: 100%; height: 60px; padding:0 20px; top: 0; left: 0; justify-content: space-between; align-items: center; border-bottom: 1px solid #eee; background: #FFF; transition: 0.1s; z-index: 10; }
-header > h1 > img { width: 100px; }
-header > p > img { width: 34px; }
+header > h1 > img { width: 100px; cursor: pointer; }
+header > p > img { width: 34px; cursor: pointer; }
 
 /* 바텀바 */
 .bt_bar { position: fixed; width: 100%; padding: 10px 0; bottom: 0; left: 0; border-top: 1px solid #eee; background-color: #FFF; }
@@ -73,16 +73,16 @@ header > p > img { width: 34px; }
 .btn { display: flex; width: 100%; align-items: center; justify-content: center; }
 .btn > p {  color:#000; font-weight: bold; font-size: 18px; }
 .btn .plus { display: block; width: 24px; height: 24px; margin-left: 5px; background: url('/public/images/ic_plus2.png') center center/cover no-repeat; }
-.btn-st1 { width: 100%; height: 50px; border: 2px solid #000; transition: 0.3s; margin-top: 15px; }
+.btn-st1 { width: 100%; height: 50px; border: 2px solid #000; transition: 0.3s; margin-top: 15px; cursor: pointer; }
 
 
 /*파일업로드*/
 .file-upload .img-wrap { position: relative; width: 100px; margin: 0 auto; position: relative; border-radius: 50%; border: 2px solid #ccc; overflow: hidden; text-align: center; }
 .file-upload .img-wrap::after {display: block;  padding-top: 100%; content: ''; }
 .file-upload .img-wrap .img-thumb { position: absolute; width: 100%; height: 100%; top: 50%; left: 50%; transform: translate(-50%, -50%); background-size: cover; background-position: center; }
-.file-upload .tax-img { min-height: 50px; border: 2px solid #000; background: url('/public/images/ic_camera.png') center center/30px no-repeat; }
+.file-upload .tax-img { min-height: 50px; border: 2px solid #000; background: url('/public/images/ic_camera.png') center center/30px no-repeat; cursor: pointer; }
 
-.img-thumb-box { margin-top: 20px; text-align: center; }
+.img-thumb-box { margin-top: 20px; text-align: center; cursor: pointer; }
 
 /*로그인, 회원가입 페이지*/
 .login-tit { margin-bottom: 34px; font-size: 42px; font-weight: bold; text-align: center; }

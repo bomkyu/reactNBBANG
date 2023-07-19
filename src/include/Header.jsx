@@ -9,7 +9,7 @@ const Header = () => {
   }
   return (
     <header>
-      <h1>
+      <h1 onClick={()=>{navigate('/main');}}>
         <img src="../images/ic_logo.svg" alt="로고"/>
       </h1>
       <p className="logout" onClick={logOut}>
