@@ -127,7 +127,7 @@ header > p > img { width: 34px; cursor: pointer; }
 .user_list::-webkit-scrollbar { display: none; /* Chrome, Safari, Opera*/ }
 .user_list > li { position: relative; width: 60px; flex: 0 0 auto; cursor: pointer;  }
 .user_list > li.king::after { position:absolute; top: -20px; left: 50%; transform: translateX(-50%); width: 20px; height: 20px; background: url('/public/images/ic_crwon.png') center center/cover no-repeat; z-index: -1; content: ""; }
-.user_list > li > p { text-align: center; }
+.user_list > li > p { display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-align: center; }
 
 /* 캘린더 */
 .calendar-title { margin: 20px 0; text-align: center; font-weight: bold; font-size: 20px; }
