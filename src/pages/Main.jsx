@@ -42,6 +42,7 @@ const Main = () => {
       }
       return null;
     })
+    
     if(tripFilter.length !== 0){
       setTripInfo(tripFilter[0]);
     }
