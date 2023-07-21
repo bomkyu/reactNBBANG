@@ -43,34 +43,32 @@
 <br>
 <br>
 
-## 시연
-
-**로그인**
-
-![로그인](https://github.com/bomkyu/reactNBBANG/assets/128655202/4abbb315-81b7-45ad-a94f-f893912d01f6)
-
----
-
-**친구추가**
-
-![친구추가](https://github.com/bomkyu/reactNBBANG/assets/128655202/2635e018-89b6-4d72-a35f-f034e14d638b)
-
----
-
-**수정**
-
-![수정](https://github.com/bomkyu/reactNBBANG/assets/128655202/9db8d3f1-ecba-49b6-a264-12801b317db6)
-
-**회원가입**
-
-![회원가입](https://github.com/bomkyu/reactNBBANG/assets/128655202/3ab64d3c-4a7b-450e-b855-975df648ad7d)
-
-
----
-
-**등록**
-
-![등록](https://github.com/bomkyu/reactNBBANG/assets/128655202/32b8630b-0487-4b7d-bb36-45bbcf1aa785)
+<table>
+  <tr>
+    <td>
+      <p align="center"><b>로그인</b></p>
+      <img src="https://github.com/bomkyu/reactNBBANG/assets/128655202/4abbb315-81b7-45ad-a94f-f893912d01f6" alt="로그인">
+    </td>
+    <td>
+      <p align="center"><b>회원가입</b></p>
+      <img src="https://github.com/bomkyu/reactNBBANG/assets/128655202/3ab64d3c-4a7b-450e-b855-975df648ad7d" alt="회원가입">
+    </td>
+    <td>
+      <p align="center"><b>친구추가</b></p>
+      <img src="https://github.com/bomkyu/reactNBBANG/assets/128655202/2635e018-89b6-4d72-a35f-f034e14d638b" alt="친구추가">
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <p align="center"><b>등록</b></p>
+      <img src="https://github.com/bomkyu/reactNBBANG/assets/128655202/32b8630b-0487-4b7d-bb36-45bbcf1aa785" alt="등록">
+    </td>
+    <td>
+      <p align="center"><b>수정</b></p>
+      <img src="https://github.com/bomkyu/reactNBBANG/assets/128655202/9db8d3f1-ecba-49b6-a264-12801b317db6" alt="수정">
+    </td>
+  </tr>
+</table>
 
 <br>
 <br>
