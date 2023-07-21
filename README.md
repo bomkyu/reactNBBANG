@@ -8,8 +8,6 @@
 
 **홈페이지 주소 :** [http://tjqjarb1.dothome.co.kr/](http://tjqjarb1.dothome.co.kr/)
 
-[https://github.com/bomkyu/reactNBBANG](https://github.com/bomkyu/reactNBBANG)
-
 - **기간 : 2023-06 ~ 2023-07 (약 한달)**
 - **인원 : 서범규**
 - **툴 : VSCODE, GIT**
@@ -17,17 +15,18 @@
 - **API** :  **GoogleMap, GoogleMapPlace**
 - **DB : FireStore(NoSQL)**
 
+<br>
+<br>
+
 ## 주요기능
-
-
-
 1. 로그인, 회원가입
 2. 실시간 친구추가 및 수락
 3. 일정추가에서 작성한 숙소금액, 구매물품 금액을 인원수에서 나눠서 인당 금액을 알려줍니다.
 
+<br>
+<br>
+
 ## 설계
-
-
 
 **FriendRequest( 친구요청 컬렉션 )**
 
@@ -41,9 +40,10 @@
 
 ![Untitled 1](https://github.com/bomkyu/reactNBBANG/assets/128655202/aed576c3-3afb-494b-8470-77ac9e32fbaa)
 
+<br>
+<br>
+
 ## 시연
-
-
 
 **로그인**
 
@@ -71,6 +71,9 @@
 **등록**
 
 ![등록](https://github.com/bomkyu/reactNBBANG/assets/128655202/32b8630b-0487-4b7d-bb36-45bbcf1aa785)
+
+<br>
+<br>
 
 ## 아쉬운점
 
