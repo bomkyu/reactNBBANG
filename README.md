@@ -31,15 +31,15 @@
 
 **FriendRequest( 친구요청 컬렉션 )**
 
-![Untitled](Untitled.png)
+![Untitled 1](https://github.com/bomkyu/reactNBBANG/assets/128655202/f59db5ce-d729-479e-80de-19a3e0cf7b47)
 
 **Trip ( 일정 정보를 저장할 컬렉션 )**
 
-![Untitled](Untitled%201.png)
+![Untitled 2](https://github.com/bomkyu/reactNBBANG/assets/128655202/c64f0438-75cb-47a9-9d4f-82aaf7f74015)
 
 **User ( 회원정보 )**
 
-![Untitled](Untitled%202.png)
+![Untitled 1](https://github.com/bomkyu/reactNBBANG/assets/128655202/aed576c3-3afb-494b-8470-77ac9e32fbaa)
 
 ## 시연
 
@@ -47,29 +47,30 @@
 
 **로그인**
 
-![로그인.gif](%25EB%25A1%259C%25EA%25B7%25B8%25EC%259D%25B8.gif)
+![로그인](https://github.com/bomkyu/reactNBBANG/assets/128655202/4abbb315-81b7-45ad-a94f-f893912d01f6)
 
 ---
 
 **친구추가**
 
-![친구추가.gif](%25EC%25B9%259C%25EA%25B5%25AC%25EC%25B6%2594%25EA%25B0%2580.gif)
+![친구추가](https://github.com/bomkyu/reactNBBANG/assets/128655202/2635e018-89b6-4d72-a35f-f034e14d638b)
 
 ---
 
 **수정**
 
-![수정.gif](%25EC%2588%2598%25EC%25A0%2595.gif)
+![수정](https://github.com/bomkyu/reactNBBANG/assets/128655202/9db8d3f1-ecba-49b6-a264-12801b317db6)
 
 **회원가입**
 
-![회원가입.gif](%25ED%259A%258C%25EC%259B%2590%25EA%25B0%2580%25EC%259E%2585.gif)
+![회원가입](https://github.com/bomkyu/reactNBBANG/assets/128655202/3ab64d3c-4a7b-450e-b855-975df648ad7d)
+
 
 ---
 
 **등록**
 
-![등록.gif](%25EB%2593%25B1%25EB%25A1%259D.gif)
+![등록](https://github.com/bomkyu/reactNBBANG/assets/128655202/32b8630b-0487-4b7d-bb36-45bbcf1aa785)
 
 ## 아쉬운점
 
